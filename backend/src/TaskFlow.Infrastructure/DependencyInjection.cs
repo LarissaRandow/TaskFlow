@@ -6,7 +6,9 @@ using TaskFlow.Application.Auth.Login;
 using TaskFlow.Application.Auth.Register;
 using TaskFlow.Application.Auth.Tokens;
 using TaskFlow.Application.Tasks.CreateTask;
+using TaskFlow.Application.Tasks.DeleteTask;
 using TaskFlow.Application.Tasks.GetTasks;
+using TaskFlow.Application.Tasks.UpdateTask;
 using TaskFlow.Infrastructure.Auth;
 using TaskFlow.Infrastructure.Persistence;
 using TaskFlow.Infrastructure.Persistence.Tasks;
@@ -47,6 +49,8 @@ public static class DependencyInjection
         services.AddScoped<IAccessTokenIssuer, JwtAccessTokenIssuer>();
         services.AddScoped<ITaskCreationService, TaskCreationService>();
         services.AddScoped<ITaskListingService, TaskListingService>();
+        services.AddScoped<ITaskUpdateService, TaskUpdateService>();
+        services.AddScoped<ITaskDeletionService, TaskDeletionService>();
         services.AddScoped<ITaskRepository, TaskRepository>();
 
         return services;

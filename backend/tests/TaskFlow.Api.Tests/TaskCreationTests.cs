@@ -236,6 +236,23 @@ public sealed class TaskCreationTests
             cancellationToken.ThrowIfCancellationRequested();
             return Task.FromResult<IReadOnlyList<TaskItem>>([]);
         }
+
+        public Task<TaskItem?> GetByIdAndUserIdAsync(
+            Guid taskId,
+            Guid userId,
+            CancellationToken cancellationToken) =>
+            throw new NotSupportedException();
+
+        public Task<bool> UpdateByIdAndUserIdAsync(
+            TaskItem task,
+            CancellationToken cancellationToken) =>
+            throw new NotSupportedException();
+
+        public Task<bool> DeleteByIdAndUserIdAsync(
+            Guid taskId,
+            Guid userId,
+            CancellationToken cancellationToken) =>
+            throw new NotSupportedException();
     }
 
     private sealed record TaskResponse(

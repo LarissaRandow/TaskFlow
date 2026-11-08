@@ -146,6 +146,23 @@ public sealed class TaskListingTests
             return Task.FromResult<IReadOnlyList<TaskItem>>(
                 tasks.Where(task => task.UserId == userId).ToArray());
         }
+
+        public Task<TaskItem?> GetByIdAndUserIdAsync(
+            Guid taskId,
+            Guid userId,
+            CancellationToken cancellationToken) =>
+            throw new NotSupportedException();
+
+        public Task<bool> UpdateByIdAndUserIdAsync(
+            TaskItem task,
+            CancellationToken cancellationToken) =>
+            throw new NotSupportedException();
+
+        public Task<bool> DeleteByIdAndUserIdAsync(
+            Guid taskId,
+            Guid userId,
+            CancellationToken cancellationToken) =>
+            throw new NotSupportedException();
     }
 
     private sealed record TaskResponse(

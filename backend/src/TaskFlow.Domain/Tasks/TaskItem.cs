@@ -66,4 +66,36 @@ public sealed class TaskItem
             dueDate?.ToUniversalTime(),
             userId);
     }
+
+    public void Update(
+        string title,
+        string? description,
+        TaskState status,
+        DateTimeOffset? dueDate)
+    {
+        var trimmedTitle = title.Trim();
+        if (trimmedTitle.Length == 0 || trimmedTitle.Length > 120)
+        {
+            throw new ArgumentException(
+                "A task title must be between 1 and 120 characters after trimming.",
+                nameof(title));
+        }
+
+        if (description?.Length > 2000)
+        {
+            throw new ArgumentException(
+                "A task description cannot exceed 2000 characters.",
+                nameof(description));
+        }
+
+        if (!Enum.IsDefined(status))
+        {
+            throw new ArgumentOutOfRangeException(nameof(status));
+        }
+
+        Title = trimmedTitle;
+        Description = description;
+        Status = status;
+        DueDate = dueDate?.ToUniversalTime();
+    }
 }
