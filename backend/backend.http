@@ -1,6 +1,9 @@
-@backend_HostAddress = http://localhost:5004
+@taskflow_HostAddress = http://localhost:5004
 
-GET {{backend_HostAddress}}/weatherforecast/
-Accept: application/json
+POST {{taskflow_HostAddress}}/api/auth/register
+Content-Type: application/json
 
-###
+{
+  "email": "person@example.com",
+  "password": "Example-password1!"
+}
