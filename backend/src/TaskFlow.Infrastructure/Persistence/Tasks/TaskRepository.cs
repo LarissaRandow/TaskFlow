@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using TaskFlow.Application.Tasks.CreateTask;
 using TaskFlow.Domain.Tasks;
 
@@ -10,4 +11,11 @@ public sealed class TaskRepository(TaskFlowDbContext dbContext) : ITaskRepositor
         await dbContext.Tasks.AddAsync(task, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<IReadOnlyList<TaskItem>> GetByUserIdAsync(
+        Guid userId,
+        CancellationToken cancellationToken) =>
+        await dbContext.Tasks
+            .Where(task => task.UserId == userId)
+            .ToListAsync(cancellationToken);
 }

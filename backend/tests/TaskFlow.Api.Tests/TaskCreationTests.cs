@@ -228,6 +228,14 @@ public sealed class TaskCreationTests
             CreatedTask = task;
             return Task.CompletedTask;
         }
+
+        public Task<IReadOnlyList<TaskItem>> GetByUserIdAsync(
+            Guid userId,
+            CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return Task.FromResult<IReadOnlyList<TaskItem>>([]);
+        }
     }
 
     private sealed record TaskResponse(
