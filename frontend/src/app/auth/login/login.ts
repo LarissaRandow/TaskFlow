@@ -1,12 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, signal } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import { AuthService } from '../auth.service';
 
@@ -34,7 +29,6 @@ type LoginControls = {
 export class Login {
   protected readonly isSubmitting = signal(false);
   protected readonly formError = signal<string | null>(null);
-  protected readonly signedInEmail = signal<string | null>(null);
   protected readonly passwordVisible = signal(false);
   protected readonly serverErrors = signal<Partial<Record<'email' | 'password', string>>>({});
 
@@ -49,7 +43,10 @@ export class Login {
     }),
   });
 
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router,
+  ) {}
 
   protected submit(): void {
     this.loginForm.markAllAsTouched();
@@ -68,7 +65,7 @@ export class Login {
       .login({ email: email.trim(), password })
       .pipe(finalize(() => this.isSubmitting.set(false)))
       .subscribe({
-        next: (response) => this.signedInEmail.set(response.user.email),
+        next: () => void this.router.navigateByUrl('/dashboard'),
         error: (error: HttpErrorResponse) => this.handleLoginError(error),
       });
   }

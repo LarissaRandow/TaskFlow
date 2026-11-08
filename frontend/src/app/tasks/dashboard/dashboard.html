@@ -1,0 +1,292 @@
+<div class="dashboard" (click)="closeMenus()">
+  <header class="topbar">
+    <a class="brand" routerLink="/dashboard" aria-label="TaskFlow dashboard">
+      <span class="brand-mark">
+        <img src="/assets/taskflow-mark.svg" width="23" height="23" alt="" />
+      </span>
+      <span class="brand-name">TaskFlow</span>
+    </a>
+
+    <a class="active-nav" routerLink="/dashboard" aria-current="page">
+      <span class="board-icon" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span>My tasks</span>
+    </a>
+
+    <div class="account">
+      <button
+        class="account-trigger"
+        type="button"
+        [attr.aria-expanded]="accountMenuOpen()"
+        aria-haspopup="menu"
+        (click)="toggleAccountMenu(); $event.stopPropagation()"
+      >
+        <span class="avatar" aria-hidden="true">{{ avatarInitials }}</span>
+        <span class="account-email">{{ accountEmail }}</span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </button>
+      @if (accountMenuOpen()) {
+        <div class="account-menu" role="menu">
+          <span class="menu-email">{{ accountEmail }}</span>
+          <button type="button" role="menuitem" (click)="logout()">Sign out</button>
+        </div>
+      }
+    </div>
+  </header>
+
+  <main class="workspace" (click)="closeMenus()">
+    <section class="page-heading" aria-labelledby="page-title">
+      <div>
+        <h1 id="page-title">My Tasks</h1>
+        <p>A clear view of what’s next, what’s moving, and what’s done.</p>
+      </div>
+      <button class="primary-button create-button" type="button" (click)="openCreateDialog()">
+        <span aria-hidden="true">＋</span>
+        Create Task
+      </button>
+    </section>
+
+    <div class="board-toolbar">
+      <div class="board-caption">
+        <span class="board-icon" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span>Board view</span>
+        <span class="task-total"
+          >{{ tasks().length }} {{ tasks().length === 1 ? 'task' : 'tasks' }}</span
+        >
+      </div>
+      <time>{{ todayLabel }}</time>
+    </div>
+
+    @if (notice()) {
+      <div class="notice" role="status">
+        {{ notice() }}
+        <button type="button" aria-label="Dismiss message" (click)="notice.set(null)">×</button>
+      </div>
+    }
+
+    @if (boardError()) {
+      <div class="error-banner" role="alert">
+        <span>{{ boardError() }}</span>
+        @if (isLoading() || tasks().length === 0) {
+          <button type="button" (click)="retryLoad()">Try again</button>
+        }
+      </div>
+    }
+
+    <section class="board" aria-label="Task board">
+      @for (column of statuses; track column.value) {
+        <section
+          class="column"
+          [class]="'column column-' + column.value"
+          [attr.aria-label]="column.label"
+        >
+          <header class="column-heading">
+            <span class="status-dot" aria-hidden="true"></span>
+            <h2>{{ column.label }}</h2>
+            <span class="count">{{ tasksFor(column.value).length }}</span>
+          </header>
+
+          <div class="task-list">
+            @for (task of tasksFor(column.value); track task.id) {
+              <article class="task-card">
+                <h3>{{ task.title }}</h3>
+                @if (task.description) {
+                  <p class="task-description">{{ task.description }}</p>
+                }
+                <div class="card-footer">
+                  <span class="due-date">
+                    <span class="calendar-icon" aria-hidden="true">▦</span>
+                    {{ formatDueDate(task.dueDate) }}
+                  </span>
+                  <div class="task-actions">
+                    <button
+                      class="more-button"
+                      type="button"
+                      [attr.aria-label]="'Actions for ' + task.title"
+                      [attr.aria-expanded]="openMenuId() === task.id"
+                      aria-haspopup="menu"
+                      (click)="toggleTaskMenu(task.id, $event)"
+                    >
+                      ···
+                    </button>
+                    @if (openMenuId() === task.id) {
+                      <div class="task-menu" role="menu">
+                        <button type="button" role="menuitem" (click)="openEditDialog(task)">
+                          ✎ <span>Edit</span>
+                        </button>
+                        <button
+                          class="delete-action"
+                          type="button"
+                          role="menuitem"
+                          (click)="openDeleteDialog(task)"
+                        >
+                          ▤ <span>Delete</span>
+                        </button>
+                      </div>
+                    }
+                  </div>
+                </div>
+              </article>
+            } @empty {
+              @if (!isLoading()) {
+                <p class="empty-column">No tasks here yet.</p>
+              }
+            }
+          </div>
+          @if (isLoading()) {
+            <div class="loading-card" aria-hidden="true"></div>
+          }
+        </section>
+      }
+    </section>
+  </main>
+
+  <footer class="workspace-footer">
+    <span>Your personal workspace</span>
+    <span>One task at a time.</span>
+  </footer>
+</div>
+
+@if (dialogMode(); as mode) {
+  <div class="dialog-backdrop" (click)="closeDialog()">
+    <section
+      class="dialog"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-labelledby]="mode === 'delete' ? 'delete-title' : 'task-dialog-title'"
+      (click)="$event.stopPropagation()"
+    >
+      @if (mode === 'delete') {
+        <div class="dialog-heading">
+          <h2 id="delete-title">Delete task?</h2>
+          <button
+            class="dialog-close"
+            type="button"
+            aria-label="Close dialog"
+            (click)="closeDialog()"
+          >
+            ×
+          </button>
+        </div>
+        <p class="delete-copy">
+          Are you sure you want to delete <strong>{{ selectedTask()?.title }}</strong
+          >? This action cannot be undone.
+        </p>
+        @if (boardError()) {
+          <p class="dialog-error" role="alert">{{ boardError() }}</p>
+        }
+        <div class="dialog-actions">
+          <button
+            class="secondary-button"
+            type="button"
+            [disabled]="isSaving()"
+            (click)="closeDialog()"
+          >
+            Cancel
+          </button>
+          <button
+            class="danger-button"
+            type="button"
+            [disabled]="isSaving()"
+            (click)="confirmDelete()"
+          >
+            {{ isSaving() ? 'Deleting…' : 'Delete task' }}
+          </button>
+        </div>
+      } @else {
+        <div class="dialog-heading">
+          <div>
+            <h2 id="task-dialog-title">{{ mode === 'create' ? 'Create task' : 'Edit task' }}</h2>
+            <p>
+              {{ mode === 'create' ? 'Add a task to your board.' : 'Make changes to this task.' }}
+            </p>
+          </div>
+          <button
+            class="dialog-close"
+            type="button"
+            aria-label="Close dialog"
+            (click)="closeDialog()"
+          >
+            ×
+          </button>
+        </div>
+
+        <form class="task-form" [formGroup]="taskForm" (ngSubmit)="saveTask()" novalidate>
+          <div class="field">
+            <label for="task-title">Title</label>
+            <input
+              id="task-title"
+              type="text"
+              maxlength="120"
+              formControlName="title"
+              placeholder="Give your task a title"
+            />
+            @if (taskForm.controls.title.touched && taskForm.controls.title.hasError('required')) {
+              <p class="field-error">Enter a task title.</p>
+            } @else if (
+              taskForm.controls.title.touched && taskForm.controls.title.hasError('pattern')
+            ) {
+              <p class="field-error">Enter a task title.</p>
+            } @else if (
+              taskForm.controls.title.touched && taskForm.controls.title.hasError('maxlength')
+            ) {
+              <p class="field-error">Titles must be 120 characters or fewer.</p>
+            }
+          </div>
+
+          <div class="field">
+            <label for="task-description"
+              >Description <span class="optional">(optional)</span></label
+            >
+            <textarea
+              id="task-description"
+              rows="3"
+              maxlength="2000"
+              formControlName="description"
+              placeholder="Add a few details"
+            ></textarea>
+            @if (
+              taskForm.controls.description.touched &&
+              taskForm.controls.description.hasError('maxlength')
+            ) {
+              <p class="field-error">Descriptions must be 2,000 characters or fewer.</p>
+            }
+          </div>
+
+          <div class="field">
+            <label for="task-due-date">Due date <span class="optional">(optional)</span></label>
+            <input id="task-due-date" type="date" formControlName="dueDate" />
+          </div>
+
+          @if (mode === 'edit') {
+            <div class="field">
+              <label for="task-status">Status</label>
+              <select id="task-status" formControlName="status">
+                @for (status of statuses; track status.value) {
+                  <option [value]="status.value">{{ status.label }}</option>
+                }
+              </select>
+            </div>
+          }
+
+          @if (boardError()) {
+            <p class="dialog-error" role="alert">{{ boardError() }}</p>
+          }
+
+          <div class="dialog-actions">
+            <button
+              class="secondary-button"
+              type="button"
+              [disabled]="isSaving()"
+              (click)="closeDialog()"
+            >
+              Cancel
+            </button>
+            <button class="primary-button" type="submit" [disabled]="isSaving()">
+              {{ isSaving() ? 'Saving…' : mode === 'create' ? 'Create task' : 'Save changes' }}
+            </button>
+          </div>
+        </form>
+      }
+    </section>
+  </div>
+}

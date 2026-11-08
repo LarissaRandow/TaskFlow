@@ -1,11 +1,12 @@
 import { provideHttpClient } from '@angular/common/http';
-import {
-  HttpTestingController,
-  provideHttpClientTesting,
-} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
+import { Component } from '@angular/core';
 import { Login } from './login';
+
+@Component({ template: '' })
+class DashboardStub {}
 
 describe('Login', () => {
   let httpTesting: HttpTestingController;
@@ -14,7 +15,11 @@ describe('Login', () => {
     sessionStorage.clear();
     await TestBed.configureTestingModule({
       imports: [Login],
-      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([{ path: 'dashboard', component: DashboardStub }]),
+      ],
     }).compileComponents();
 
     httpTesting = TestBed.inject(HttpTestingController);
@@ -40,7 +45,7 @@ describe('Login', () => {
     expect(form.valid).toBe(true);
   });
 
-  it('sends credentials, stores the access token, and shows the signed-in state', () => {
+  it('sends credentials, stores the session, and navigates to the dashboard', async () => {
     const fixture = TestBed.createComponent(Login);
     const form = fixture.componentInstance.loginForm;
     form.setValue({ email: ' person@example.com ', password: 'StrongPass1!' });
@@ -64,8 +69,9 @@ describe('Login', () => {
     fixture.detectChanges();
 
     expect(sessionStorage.getItem('taskflow.accessToken')).toBe('signed-token');
-    expect(fixture.nativeElement.textContent).toContain('You’re signed in');
-    expect(fixture.nativeElement.textContent).toContain('person@example.com');
+    expect(sessionStorage.getItem('taskflow.userEmail')).toBe('person@example.com');
+    await fixture.whenStable();
+    expect(TestBed.inject(Router).url).toBe('/dashboard');
   });
 
   it('shows a generic message for invalid credentials', () => {
