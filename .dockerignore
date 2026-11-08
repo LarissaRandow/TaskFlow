@@ -1,0 +1,11 @@
+**/node_modules
+**/dist
+**/bin
+**/obj
+**/.angular
+**/.vs
+.git
+.gitignore
+.env
+**/secrets.json
+**/*.user
