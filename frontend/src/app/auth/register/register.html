@@ -1,0 +1,212 @@
+<main class="register-page">
+  <header class="page-header">
+    <a class="brand" routerLink="/register" aria-label="TaskFlow home">
+      <span class="brand-mark">
+        <img src="/assets/taskflow-mark.svg" width="23" height="23" alt="" />
+      </span>
+      <span class="brand-name">TaskFlow</span>
+    </a>
+  </header>
+
+  <section class="authentication" aria-labelledby="registration-title">
+    @if (registeredEmail(); as email) {
+      <div class="auth-card success-card" role="status">
+        <div>
+          <h1 id="registration-title">Your account is ready</h1>
+          <p class="subtitle">We created an account for {{ email }}.</p>
+        </div>
+        <p class="success-message">You can now sign in to TaskFlow.</p>
+        <a class="primary-button sign-in-button" routerLink="/login">Sign in</a>
+      </div>
+    } @else {
+      <div class="auth-card">
+        <div class="introduction">
+          <h1 id="registration-title">Create your account</h1>
+          <p class="subtitle">Less mental clutter. More work that matters.</p>
+        </div>
+
+        <form
+          class="registration-form"
+          [formGroup]="registrationForm"
+          (ngSubmit)="submit()"
+          novalidate
+        >
+          <div class="field">
+            <label for="email">Email address</label>
+            <input
+              id="email"
+              type="email"
+              autocomplete="email"
+              placeholder="you@example.com"
+              formControlName="email"
+              [attr.aria-invalid]="
+                (registrationForm.controls.email.invalid &&
+                  registrationForm.controls.email.touched) ||
+                !!serverErrors().email
+              "
+              [attr.aria-describedby]="
+                (registrationForm.controls.email.invalid &&
+                  registrationForm.controls.email.touched) ||
+                serverErrors().email
+                  ? 'email-error'
+                  : null
+              "
+              (input)="clearServerError('email')"
+            />
+            @if (
+              registrationForm.controls.email.touched &&
+              registrationForm.controls.email.hasError('required')
+            ) {
+              <p class="field-error" id="email-error">Enter your email address.</p>
+            } @else if (
+              registrationForm.controls.email.touched &&
+              registrationForm.controls.email.hasError('email')
+            ) {
+              <p class="field-error" id="email-error">Enter a valid email address.</p>
+            } @else if (
+              registrationForm.controls.email.touched &&
+              registrationForm.controls.email.hasError('maxlength')
+            ) {
+              <p class="field-error" id="email-error">
+                Email addresses must be 256 characters or fewer.
+              </p>
+            } @else if (serverErrors().email) {
+              <p class="field-error" id="email-error">{{ serverErrors().email }}</p>
+            }
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="input-with-action">
+              <input
+                id="password"
+                [type]="passwordVisible() ? 'text' : 'password'"
+                autocomplete="new-password"
+                placeholder="Create a password"
+                formControlName="password"
+                aria-describedby="password-hint"
+                [attr.aria-invalid]="
+                  (registrationForm.controls.password.invalid &&
+                    registrationForm.controls.password.touched) ||
+                  !!serverErrors().password
+                "
+                [attr.aria-describedby]="
+                  (registrationForm.controls.password.invalid &&
+                    registrationForm.controls.password.touched) ||
+                  serverErrors().password
+                    ? 'password-hint password-error'
+                    : 'password-hint'
+                "
+                (input)="clearServerError('password')"
+              />
+              <button
+                class="visibility-toggle"
+                type="button"
+                [attr.aria-label]="passwordVisible() ? 'Hide password' : 'Show password'"
+                [attr.aria-pressed]="passwordVisible()"
+                (click)="passwordVisible.update((visible) => !visible)"
+              >
+                @if (!passwordVisible()) {
+                  <img src="/assets/eye-off.svg" width="18" height="18" alt="" />
+                } @else {
+                  <span aria-hidden="true">Hide</span>
+                }
+              </button>
+            </div>
+            <p class="field-hint" id="password-hint">
+              At least 8 characters, including uppercase, lowercase, a number, and a symbol.
+            </p>
+            @if (
+              registrationForm.controls.password.touched &&
+              registrationForm.controls.password.hasError('required')
+            ) {
+              <p class="field-error" id="password-error">Enter a password.</p>
+            } @else if (
+              registrationForm.controls.password.touched &&
+              registrationForm.controls.password.hasError('minlength')
+            ) {
+              <p class="field-error" id="password-error">Use at least 8 characters.</p>
+            } @else if (
+              registrationForm.controls.password.touched &&
+              registrationForm.controls.password.hasError('pattern')
+            ) {
+              <p class="field-error" id="password-error">
+                Include uppercase, lowercase, a number, and a symbol.
+              </p>
+            } @else if (serverErrors().password) {
+              <p class="field-error" id="password-error">{{ serverErrors().password }}</p>
+            }
+          </div>
+
+          <div class="field">
+            <label for="confirm-password">Confirm password</label>
+            <div class="input-with-action">
+              <input
+                id="confirm-password"
+                [type]="confirmPasswordVisible() ? 'text' : 'password'"
+                autocomplete="new-password"
+                placeholder="Re-enter your password"
+                formControlName="confirmPassword"
+                [attr.aria-invalid]="
+                  (registrationForm.controls.confirmPassword.invalid ||
+                    registrationForm.hasError('passwordMismatch')) &&
+                  registrationForm.controls.confirmPassword.touched
+                "
+                [attr.aria-describedby]="
+                  registrationForm.controls.confirmPassword.touched &&
+                  (registrationForm.controls.confirmPassword.invalid ||
+                    registrationForm.hasError('passwordMismatch'))
+                    ? 'confirm-password-error'
+                    : null
+                "
+              />
+              <button
+                class="visibility-toggle"
+                type="button"
+                [attr.aria-label]="
+                  confirmPasswordVisible()
+                    ? 'Hide confirmation password'
+                    : 'Show confirmation password'
+                "
+                [attr.aria-pressed]="confirmPasswordVisible()"
+                (click)="confirmPasswordVisible.update((visible) => !visible)"
+              >
+                @if (!confirmPasswordVisible()) {
+                  <img src="/assets/eye-off.svg" width="18" height="18" alt="" />
+                } @else {
+                  <span aria-hidden="true">Hide</span>
+                }
+              </button>
+            </div>
+            @if (
+              registrationForm.controls.confirmPassword.touched &&
+              registrationForm.controls.confirmPassword.hasError('required')
+            ) {
+              <p class="field-error" id="confirm-password-error">Confirm your password.</p>
+            } @else if (
+              registrationForm.controls.confirmPassword.touched &&
+              registrationForm.hasError('passwordMismatch')
+            ) {
+              <p class="field-error" id="confirm-password-error">Passwords do not match.</p>
+            }
+          </div>
+
+          @if (formError()) {
+            <p class="form-error" role="alert">{{ formError() }}</p>
+          }
+
+          <button class="primary-button" type="submit" [disabled]="isSubmitting()">
+            {{ isSubmitting() ? 'Creating account…' : 'Create account' }}
+          </button>
+        </form>
+
+        <p class="sign-in-prompt">
+          Already have an account?
+          <a routerLink="/login">Sign in</a>
+        </p>
+      </div>
+    }
+  </section>
+
+  <footer class="page-footer">© 2026 TaskFlow. Make room for what matters.</footer>
+</main>

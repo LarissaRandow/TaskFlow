@@ -1,0 +1,288 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.register-page {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  background: #f7f8fa;
+}
+
+.page-header {
+  display: flex;
+  min-height: 88px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 56px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 9px;
+  background: #5155d9;
+}
+
+.brand-mark img {
+  display: block;
+  width: 23px;
+  height: 23px;
+}
+
+.brand-name {
+  color: #202536;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.6px;
+}
+
+.tagline {
+  margin: 0;
+  color: #667085;
+  font-size: 13px;
+}
+
+.authentication {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px 48px;
+}
+
+.auth-card {
+  display: flex;
+  width: min(464px, 100%);
+  flex-direction: column;
+  gap: 28px;
+  padding: 36px;
+  border: 1px solid #e4e7ec;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgb(32 37 54 / 2%);
+}
+
+.introduction,
+.success-card > div:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+h1 {
+  margin: 0;
+  color: #202536;
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: -0.8px;
+  line-height: 1.2;
+}
+
+.subtitle,
+.success-message {
+  margin: 0;
+  color: #667085;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field label {
+  color: #202536;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.field input {
+  width: 100%;
+  height: 46px;
+  min-width: 0;
+  padding: 0 14px;
+  border: 1px solid #e4e7ec;
+  border-radius: 8px;
+  outline: none;
+  background: #fff;
+  color: #202536;
+  font-size: 14px;
+}
+
+.field input::placeholder {
+  color: #98a2b3;
+  opacity: 1;
+}
+
+.field input:focus {
+  border-color: #5155d9;
+  box-shadow: 0 0 0 3px rgb(81 85 217 / 12%);
+}
+
+.input-with-action {
+  position: relative;
+}
+
+.input-with-action input {
+  padding-right: 64px;
+}
+
+.visibility-toggle {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  display: grid;
+  min-width: 24px;
+  min-height: 28px;
+  padding: 4px;
+  transform: translateY(-50%);
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: #667085;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.visibility-toggle img {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.field-hint,
+.field-error {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.field-hint {
+  color: #667085;
+}
+
+.field-error,
+.form-error {
+  color: #b42318;
+}
+
+.form-error {
+  margin: -4px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.primary-button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 8px;
+  background: #5155d9;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.primary-button:hover:not(:disabled) {
+  background: #4549c5;
+}
+
+.primary-button:focus-visible,
+.visibility-toggle:focus-visible,
+.sign-in-prompt a:focus-visible {
+  outline: 3px solid rgb(81 85 217 / 35%);
+  outline-offset: 2px;
+}
+
+.primary-button:disabled {
+  cursor: wait;
+  opacity: 0.75;
+}
+
+.sign-in-prompt {
+  margin: 0;
+  color: #667085;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.sign-in-prompt a {
+  color: #5155d9;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.sign-in-prompt a:hover {
+  text-decoration: underline;
+}
+
+.success-message {
+  color: #202536;
+}
+
+.page-footer {
+  display: flex;
+  min-height: 64px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  color: #667085;
+  font-size: 12px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .page-header {
+    min-height: 72px;
+    padding: 0 20px;
+  }
+
+  .tagline {
+    display: none;
+  }
+
+  .authentication {
+    align-items: flex-start;
+    padding: 20px 16px 32px;
+  }
+
+  .auth-card {
+    gap: 24px;
+    padding: 28px 22px;
+  }
+
+  h1 {
+    font-size: 25px;
+  }
+
+  .page-footer {
+    min-height: 56px;
+  }
+}
