@@ -13,6 +13,12 @@ From the repository root, run:
 docker compose up --build
 ```
 
+In Development, the API generates a temporary signing key if
+`TASKFLOW_JWT_SIGNING_KEY` is not set. Tokens are invalidated when the API
+restarts. For a stable local key, set `TASKFLOW_JWT_SIGNING_KEY` in the shell
+before starting Compose. Production deployments must configure `Jwt:SigningKey`
+securely; the API does not generate production keys.
+
 On first startup, Compose builds the frontend and API, starts SQL Server,
 waits for the database to become healthy, and the API applies its EF Core
 migrations automatically. Open:
@@ -28,8 +34,8 @@ in a Docker volume and survives container restarts and `docker compose down`.
 
 ## Run tests locally
 
-The backend tests use a test registration service and do not require Docker or
-a SQL Server connection. From the repository root:
+The backend tests use stubbed authentication services and do not require Docker
+or a SQL Server connection. From the repository root:
 
 ```powershell
 dotnet test .\backend\tests\TaskFlow.Api.Tests\TaskFlow.Api.Tests.csproj

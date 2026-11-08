@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TaskFlow.Application.Auth;
+namespace TaskFlow.Application.Auth.Models;
 
 public sealed class RegisterUserRequest
 {

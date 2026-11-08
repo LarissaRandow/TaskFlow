@@ -10,7 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using TaskFlow.Application.Auth;
+using TaskFlow.Application.Auth.Models;
+using TaskFlow.Application.Auth.Services;
 using TaskFlow.Domain.Users;
 using TaskFlow.Infrastructure;
 using Xunit;
@@ -125,9 +126,13 @@ public sealed class AuthRegistrationTests
             builder.UseEnvironment("Development");
             builder.ConfigureTestServices(services =>
             {
+                ConfigureJwtOptions(services);
                 services.RemoveAll<IUserRegistrationService>();
                 services.AddSingleton<IUserRegistrationService>(
                     new StubRegistrationService(result));
+                services.RemoveAll<IUserLoginService>();
+                services.AddSingleton<IUserLoginService>(
+                    new StubLoginService(LoginResult.InvalidCredentials()));
             });
         }
     }
@@ -138,4 +143,28 @@ public sealed class AuthRegistrationTests
         public Task<RegistrationResult> RegisterAsync(string email, string password) =>
             Task.FromResult(result);
     }
+
+    private sealed class StubLoginService(LoginResult result) : IUserLoginService
+    {
+        public Task<LoginResult> LoginAsync(string email, string password) =>
+            Task.FromResult(result);
+    }
+
+    internal static class TestConfiguration
+    {
+        public static readonly Dictionary<string, string?> Values = new()
+        {
+            ["Jwt:Issuer"] = "TaskFlow.Tests",
+            ["Jwt:Audience"] = "TaskFlow.Tests.Client",
+            ["Jwt:SigningKey"] = "test-only-signing-key-with-at-least-32-bytes"
+        };
+    }
+
+    internal static void ConfigureJwtOptions(IServiceCollection services) =>
+        services.Configure<JwtOptions>(options =>
+        {
+            options.Issuer = TestConfiguration.Values["Jwt:Issuer"]!;
+            options.Audience = TestConfiguration.Values["Jwt:Audience"]!;
+            options.SigningKey = TestConfiguration.Values["Jwt:SigningKey"]!;
+        });
 }

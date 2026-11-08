@@ -1,9 +1,23 @@
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using TaskFlow.Api;
 using TaskFlow.Infrastructure;
 using Microsoft.OpenApi;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using TaskFlow.Application.Auth.Models;
 using TaskFlow.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
+if (builder.Environment.IsDevelopment() &&
+    string.IsNullOrWhiteSpace(builder.Configuration[$"{JwtOptions.SectionName}:SigningKey"]))
+{
+    builder.Configuration[$"{JwtOptions.SectionName}:SigningKey"] =
+        Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
+    Console.Error.WriteLine(
+        "WARNING: Using a temporary development JWT signing key. Tokens will stop working when the API restarts.");
+}
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(options =>
@@ -14,7 +28,22 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v1"
     });
 });
-builder.Services.AddAuthorization();
+builder.Services
+    .AddOptions<JwtOptions>()
+    .Bind(builder.Configuration.GetSection(JwtOptions.SectionName))
+    .Validate(options => options.IsValid,
+        "Configure Jwt:Issuer, Jwt:Audience, and Jwt:SigningKey (at least 32 UTF-8 bytes).")
+    .ValidateOnStart();
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer();
+builder.Services.AddSingleton<IConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>();
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+});
 builder.Services.AddProblemDetails();
 builder.Services.AddInfrastructure(builder.Configuration);
 
@@ -31,11 +60,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.MapGet("/", () => Results.Redirect("/swagger"));
+    app.MapGet("/", () => Results.Redirect("/swagger")).AllowAnonymous();
 }
 
 app.UseExceptionHandler();
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 

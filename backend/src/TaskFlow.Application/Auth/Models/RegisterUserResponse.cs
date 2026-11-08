@@ -1,6 +1,6 @@
 using TaskFlow.Domain.Users;
 
-namespace TaskFlow.Application.Auth;
+namespace TaskFlow.Application.Auth.Models;
 
 public sealed record RegisterUserResponse(Guid Id, string Email)
 {

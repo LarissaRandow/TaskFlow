@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using TaskFlow.Application.Auth;
+using TaskFlow.Application.Auth.Models;
+using TaskFlow.Application.Auth.Services;
 using TaskFlow.Domain.Users;
 
 namespace TaskFlow.Infrastructure.Identity;

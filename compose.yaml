@@ -28,6 +28,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:8080
+      Jwt__SigningKey: ${TASKFLOW_JWT_SIGNING_KEY:-}
       ConnectionStrings__TaskFlow: "Server=sqlserver,1433;Database=TaskFlow;User Id=sa;Password=TaskFlow_dev_2026!;Encrypt=True;TrustServerCertificate=True"
       Database__ApplyMigrationsOnStartup: "true"
     ports:
