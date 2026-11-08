@@ -16,7 +16,7 @@
 - `Id`: server-generated UUID.
 - `Title`: required, trimmed, non-empty (**proposed maximum: 120 characters**).
 - `Description`: **proposed optional**, with a maximum of 2,000 characters.
-- `Status`: required; exactly `Todo`, `InProgress`, `Completed`, or `Discarded`.
+- `Status`: exactly `Todo`, `InProgress`, `Completed`, or `Discarded`. New tasks always start as `Todo`; the create request cannot set status. Task updates may set any of the four allowed values.
 - `DueDate`: **proposed optional** ISO-8601 date/time; persist and return an unambiguous UTC instant.
 - `UserId`: server-assigned UUID from the authenticated identity; never editable through task DTOs.
 
@@ -25,6 +25,7 @@ The title/description limits, optionality of description and due date, and passw
 ## Status
 
 - The allowed set is closed and contains exactly four values: `Todo`, `InProgress`, `Completed`, `Discarded`.
+- Task creation always assigns `Todo` on the server; clients cannot choose an initial status.
 - A task may be moved directly between any two allowed statuses; no transition workflow was requested (**proposed**).
 - Status values are represented by their exact names in JSON; unknown values are rejected, not silently mapped.
 - The task edit experience exposes a status selector for exactly the allowed status values.

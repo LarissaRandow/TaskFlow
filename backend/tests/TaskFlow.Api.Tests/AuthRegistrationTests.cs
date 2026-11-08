@@ -10,10 +10,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using TaskFlow.Application.Auth.Models;
-using TaskFlow.Application.Auth.Services;
+using TaskFlow.Application.Auth.Login;
+using TaskFlow.Application.Auth.Register;
+using TaskFlow.Application.Auth.Tokens;
 using TaskFlow.Domain.Users;
 using TaskFlow.Infrastructure;
+using TaskFlow.Infrastructure.Auth;
 using Xunit;
 
 namespace TaskFlow.Api.Tests;

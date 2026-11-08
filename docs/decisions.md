@@ -19,6 +19,7 @@
 | D-13 | Registration name | Omit full name from registration; collect email and password only | Keeps the form and request aligned with the approved registration contract | Approved 2026-11-07 |
 | D-14 | Task status UI | Add a status selector to the edit-task dialog with the four exact API values and Figma display labels | Provides the required status-update capability; intentional addition to the Figma edit frame | Approved 2026-11-07 |
 | D-15 | Account label | Use authenticated email in the dashboard account area and derive avatar initials from it; do not persist a profile name | No display-name property or registration field is in scope | Approved 2026-11-07 |
+| D-16 | Initial task status | Omit status from task creation requests and always assign `Todo` on the server; task updates may still select any allowed status | Ensures newly created tasks enter the board's Todo column consistently | Approved 2026-11-08 |
 
 ## Decision process
 

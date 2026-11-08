@@ -1,12 +1,13 @@
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using TaskFlow.Api;
+using TaskFlow.Api.Authentication;
+using TaskFlow.Api.OpenApi;
 using TaskFlow.Infrastructure;
+using TaskFlow.Infrastructure.Auth;
 using Microsoft.OpenApi;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using TaskFlow.Application.Auth.Models;
 using TaskFlow.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +28,14 @@ builder.Services.AddSwaggerGen(options =>
         Title = "TaskFlow API",
         Version = "v1"
     });
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Description = "Provide a valid TaskFlow bearer access token."
+    });
+    options.OperationFilter<AuthorizeCheckOperationFilter>();
 });
 builder.Services
     .AddOptions<JwtOptions>()

@@ -33,10 +33,24 @@ Proposed layout under `backend/`:
 
 ```text
 src/
-  TaskFlow.Api/             HTTP endpoints, auth setup, DI, OpenAPI
-  TaskFlow.Application/     use cases, DTOs, validation, ports/interfaces
-  TaskFlow.Domain/          Task entity, status enum, domain invariants
-  TaskFlow.Infrastructure/  EF Core, SQL Server, Identity, JWT issuance
+  TaskFlow.Api/
+    Auth/                   Auth controller and HTTP contracts
+    Tasks/                  Task controller and HTTP contracts
+    Authentication/         JWT bearer configuration
+    OpenApi/                Swagger/OpenAPI configuration
+  TaskFlow.Application/
+    Auth/Login/             Login use case and result
+    Auth/Register/          Registration use case and result
+    Auth/Tokens/             Access-token port and result
+    Tasks/CreateTask/       Create-task use case, result, and persistence port
+  TaskFlow.Domain/
+    Tasks/                  Task entity, status, and invariants
+    Users/                  Domain user representation
+  TaskFlow.Infrastructure/
+    Auth/                   Identity, JWT implementations, and JWT options
+    Persistence/
+      Tasks/                Task persistence adapter
+      Migrations/           EF Core migrations and model snapshot
 tests/
   TaskFlow.Domain.Tests/
   TaskFlow.Application.Tests/
@@ -47,7 +61,7 @@ TaskFlow.slnx               retain the repository's existing solution format
 Responsibilities and dependency direction:
 
 - **Domain** contains task rules and has no ASP.NET Core, EF Core, or SQL Server dependency.
-- **Application** coordinates use cases and defines persistence/authentication ports; it depends on Domain, not Infrastructure.
+- **Application** coordinates use cases and defines persistence/authentication ports; organize these by feature/use case. It depends on Domain, not Infrastructure. HTTP request/response contracts belong to API.
 - **Infrastructure** implements those ports with EF Core/SQL Server and ASP.NET Core Identity. It depends inward on Application/Domain.
 - **API** is the composition root and HTTP adapter. It maps requests to application use cases and maps application results to HTTP responses.
 - **Tests** are separated by behavior; API integration tests exercise the real HTTP/authentication boundary.

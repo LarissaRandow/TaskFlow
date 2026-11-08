@@ -2,9 +2,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TaskFlow.Application.Auth.Services;
-using TaskFlow.Infrastructure.Identity;
+using TaskFlow.Application.Auth.Login;
+using TaskFlow.Application.Auth.Register;
+using TaskFlow.Application.Auth.Tokens;
+using TaskFlow.Application.Tasks.CreateTask;
+using TaskFlow.Infrastructure.Auth;
 using TaskFlow.Infrastructure.Persistence;
+using TaskFlow.Infrastructure.Persistence.Tasks;
 
 namespace TaskFlow.Infrastructure;
 
@@ -40,6 +44,8 @@ public static class DependencyInjection
         services.AddScoped<IUserRegistrationService, IdentityUserRegistrationService>();
         services.AddScoped<IUserLoginService, IdentityUserLoginService>();
         services.AddScoped<IAccessTokenIssuer, JwtAccessTokenIssuer>();
+        services.AddScoped<ITaskCreationService, TaskCreationService>();
+        services.AddScoped<ITaskRepository, TaskRepository>();
 
         return services;
     }

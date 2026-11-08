@@ -77,12 +77,13 @@ Request:
 {
   "title": "Prepare demo",
   "description": "Review the interview walkthrough",
-  "status": "Todo",
   "dueDate": "2026-01-01T12:00:00Z"
 }
 ```
 
-Success: `201 Created` with the task representation, including server-generated `id` and `userId`. Invalid input or an unknown status: `400 Bad Request`.
+The server always creates the task with status `Todo`. The request does not accept a `status` field.
+
+Success: `201 Created` with the task representation, including server-generated `id` and `userId`, and status `Todo`. Invalid input: `400 Bad Request`.
 
 ### `GET /api/tasks/{id}`
 
@@ -98,7 +99,7 @@ Success: `204 No Content`. Missing or non-owned ID: `404 Not Found`.
 
 ## Common responses
 
-- `400 Bad Request`: invalid JSON, validation failure, or invalid status.
+- `400 Bad Request`: invalid JSON, validation failure, or invalid status on task update.
 - `401 Unauthorized`: missing/invalid/expired bearer token (or invalid login credentials).
 - `404 Not Found`: task does not exist for this user; does not reveal cross-user existence.
 - `409 Conflict`: **proposed** duplicate email during registration.
