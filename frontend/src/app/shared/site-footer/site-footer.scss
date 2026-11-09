@@ -1,0 +1,21 @@
+:host {
+  display: block;
+  flex: none;
+}
+
+.page-footer {
+  display: flex;
+  min-height: 64px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  color: #667085;
+  font-size: 12px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .page-footer {
+    min-height: 56px;
+  }
+}

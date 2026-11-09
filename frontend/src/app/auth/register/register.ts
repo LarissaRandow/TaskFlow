@@ -11,6 +11,8 @@ import {
 import { RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import { AuthService } from '../auth.service';
+import { BrandHeader } from '../../shared/brand-header/brand-header';
+import { SiteFooter } from '../../shared/site-footer/site-footer';
 
 interface RegistrationProblem {
   detail?: string;
@@ -38,7 +40,7 @@ function passwordConfirmationValidator(control: AbstractControl): ValidationErro
 const passwordPolicy = /(?=.*\p{Lu})(?=.*\p{Ll})(?=.*\p{Nd})(?=.*[^\p{L}\p{N}])/u;
 
 @Component({
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [BrandHeader, ReactiveFormsModule, RouterLink, SiteFooter],
   selector: 'app-register',
   styleUrl: './register.scss',
   templateUrl: './register.html',

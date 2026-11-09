@@ -4,6 +4,8 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import { AuthService } from '../auth.service';
+import { BrandHeader } from '../../shared/brand-header/brand-header';
+import { SiteFooter } from '../../shared/site-footer/site-footer';
 
 interface LoginProblem {
   detail?: string;
@@ -21,7 +23,7 @@ type LoginControls = {
 };
 
 @Component({
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [BrandHeader, ReactiveFormsModule, RouterLink, SiteFooter],
   selector: 'app-login',
   styleUrl: './login.scss',
   templateUrl: './login.html',

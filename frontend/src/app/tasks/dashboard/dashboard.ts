@@ -11,6 +11,8 @@ import {
   TaskStatus,
   UpdateTaskRequest,
 } from '../task.service';
+import { BrandHeader } from '../../shared/brand-header/brand-header';
+import { SiteFooter } from '../../shared/site-footer/site-footer';
 
 type DialogMode = 'create' | 'edit' | 'delete' | null;
 type TaskFormControls = {
@@ -26,7 +28,7 @@ interface TaskProblem {
 }
 
 @Component({
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [BrandHeader, ReactiveFormsModule, RouterLink, SiteFooter],
   selector: 'app-dashboard',
   styleUrls: ['./dashboard.scss', './dashboard-dialog.scss'],
   templateUrl: './dashboard.html',

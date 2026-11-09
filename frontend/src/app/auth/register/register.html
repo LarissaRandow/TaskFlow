@@ -1,11 +1,6 @@
 <main class="register-page">
   <header class="page-header">
-    <a class="brand" routerLink="/register" aria-label="TaskFlow home">
-      <span class="brand-mark">
-        <img src="/assets/taskflow-mark.svg" width="23" height="23" alt="" />
-      </span>
-      <span class="brand-name">TaskFlow</span>
-    </a>
+    <app-brand-header link="/register" ariaLabel="TaskFlow home" />
   </header>
 
   <section class="authentication" aria-labelledby="registration-title">
@@ -22,7 +17,6 @@
       <div class="auth-card">
         <div class="introduction">
           <h1 id="registration-title">Create your account</h1>
-          <p class="subtitle">Less mental clutter. More work that matters.</p>
         </div>
 
         <form
@@ -208,5 +202,5 @@
     }
   </section>
 
-  <footer class="page-footer">© 2026 TaskFlow. Make room for what matters.</footer>
+  <app-site-footer />
 </main>

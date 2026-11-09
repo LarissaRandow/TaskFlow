@@ -1,11 +1,6 @@
 <div class="dashboard" (click)="closeMenus()">
   <header class="topbar">
-    <a class="brand" routerLink="/dashboard" aria-label="TaskFlow dashboard">
-      <span class="brand-mark">
-        <img src="/assets/taskflow-mark.svg" width="23" height="23" alt="" />
-      </span>
-      <span class="brand-name">TaskFlow</span>
-    </a>
+    <app-brand-header variant="dashboard" ariaLabel="TaskFlow dashboard" />
 
     <a class="active-nav" routerLink="/dashboard" aria-current="page">
       <span class="board-icon" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
@@ -22,7 +17,7 @@
       >
         <span class="avatar" aria-hidden="true">{{ avatarInitials }}</span>
         <span class="account-email">{{ accountEmail }}</span>
-        <span class="chevron" aria-hidden="true">⌄</span>
+        <span class="chevron" aria-hidden="true"></span>
       </button>
       @if (accountMenuOpen()) {
         <div class="account-menu" role="menu">
@@ -140,10 +135,7 @@
     </section>
   </main>
 
-  <footer class="workspace-footer">
-    <span>Your personal workspace</span>
-    <span>One task at a time.</span>
-  </footer>
+  <app-site-footer />
 </div>
 
 @if (dialogMode(); as mode) {

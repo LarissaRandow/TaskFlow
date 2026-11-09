@@ -1,0 +1,9 @@
+<a class="brand" [routerLink]="link()" [attr.aria-label]="ariaLabel()">
+  <span class="brand-mark">
+    <img src="/assets/taskflow-mark.svg" width="23" height="23" alt="" />
+  </span>
+  <span class="brand-name">TaskFlow</span>
+</a>
+@if (tagline()) {
+  <p class="tagline">Less mental clutter. More work that matters.</p>
+}
