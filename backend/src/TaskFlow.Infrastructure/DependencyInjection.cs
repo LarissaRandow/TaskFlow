@@ -52,6 +52,7 @@ public static class DependencyInjection
         services.AddScoped<ITaskUpdateService, TaskUpdateService>();
         services.AddScoped<ITaskDeletionService, TaskDeletionService>();
         services.AddScoped<ITaskRepository, TaskRepository>();
+        services.AddScoped<DemoDataSeeder>();
 
         return services;
     }

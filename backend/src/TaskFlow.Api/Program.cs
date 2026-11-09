@@ -63,6 +63,13 @@ if (builder.Configuration.GetValue<bool>("Database:ApplyMigrationsOnStartup"))
     await using var scope = app.Services.CreateAsyncScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<TaskFlowDbContext>();
     await dbContext.Database.MigrateAsync();
+
+    if (app.Environment.IsDevelopment() &&
+        builder.Configuration.GetValue<bool>("DemoData:Enabled"))
+    {
+        var demoDataSeeder = scope.ServiceProvider.GetRequiredService<DemoDataSeeder>();
+        await demoDataSeeder.SeedAsync();
+    }
 }
 
 if (app.Environment.IsDevelopment())
