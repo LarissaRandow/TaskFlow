@@ -1,59 +1,65 @@
-# Frontend
+# TaskFlow Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.6.
+The frontend is a single-page application built with Angular 22, TypeScript, and SCSS. It provides registration and sign-in screens and an authenticated Kanban board for managing personal tasks.
 
-## Development server
+For the full-stack Docker setup, application URLs, demo account, and product overview, see the [root README](../README.md). This guide focuses on frontend development and implementation details.
 
-To start a local development server, run:
+## Prerequisites
 
-```bash
-ng serve
+- Node.js and npm
+- The TaskFlow API running locally for end-to-end frontend/API behavior
+
+## Install and run
+
+From the `frontend` directory, install dependencies and start the development server:
+
+```powershell
+npm install
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Open http://localhost:4200. The development server uses [proxy.conf.json](proxy.conf.json) to forward `/api` requests to the local API, so the browser can use the same relative API paths as the application.
 
-## Code scaffolding
+To run the complete application, including SQL Server and API, use the Docker Compose instructions in the [root README](../README.md).
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Main features
 
-```bash
-ng generate component component-name
+- **Authentication** — registration and login forms with client-side validation and API error feedback.
+- **Session handling** — the access token is stored in `sessionStorage`, attached to task API requests by an HTTP interceptor, and removed on sign-out.
+- **Route protection** — the dashboard route uses an authentication guard for navigation. API authorization remains the security boundary.
+- **Task board** — displays the user's tasks in the four supported status columns: `Todo`, `InProgress`, `Completed`, and `Discarded`.
+- **Task management** — create, edit, and delete dialogs integrate with the documented API contract and display loading, validation, success, and error states.
+- **Responsive UI** — desktop layouts follow the approved Figma reference, with responsive adaptations for smaller screens.
+
+The frontend uses the approved [API contract](../.github/docs/api-contract.md) as the source of truth for routes, request/response fields, and task status values. It does not assign task ownership; the API derives `userId` from the authenticated user.
+
+## Project structure
+
+```text
+src/app/
+  auth/       Registration, login, route guard, and HTTP interceptor
+  tasks/      Dashboard and task API service
+  shared/     Reusable presentation components
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+The application uses standalone Angular components, reactive forms, signals, the Angular router, and lightweight injectable services. It does not use a separate state-management library.
 
-```bash
-ng generate --help
+## Build and tests
+
+Run a production build:
+
+```powershell
+npm run build
 ```
 
-## Building
+Run frontend unit/component tests with Vitest:
 
-To build the project run:
-
-```bash
-ng build
+```powershell
+npm test
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+The current tests cover the application shell, login and registration flows, auth interceptor behavior, and dashboard/task interactions. The repository does not currently configure an end-to-end browser test runner.
 
-## Running unit tests
+## Design reference
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+The approved Figma frames and documented resolutions are described in [ui-design-reference.md](../.github/docs/ui-design-reference.md). The reference contains desktop designs; responsive behavior on smaller screens is an implementation adaptation rather than a directly specified Figma layout.
