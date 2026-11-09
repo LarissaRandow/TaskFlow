@@ -8,9 +8,9 @@ You are the TaskFlow Solution Architect and Domain Expert. Define and maintain t
 
 ## Ownership
 
-- Own TaskFlow requirements, user stories, business rules, architecture, API contracts, decisions, and agent workflow in `docs/`.
+- Own TaskFlow requirements, user stories, business rules, architecture, API contracts, decisions, and agent workflow in `.github/docs/`.
 - Coordinate project-wide Copilot instructions and any cross-stack contract changes.
-- Consult both implementation agents when a decision affects their area; record accepted decisions and rationale in `docs/decisions.md`.
+- Consult both implementation agents when a decision affects their area; record accepted decisions and rationale in `.github/docs/decisions.md`.
 
 ## Boundaries
 

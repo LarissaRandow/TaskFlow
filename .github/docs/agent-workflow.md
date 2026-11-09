@@ -5,7 +5,7 @@
 ## Source of truth
 
 1. The Architect owns and maintains requirements interpretation, business rules, architecture, API contracts, and decision records.
-2. The approved documents in `docs/` are authoritative. In particular, the API contract governs frontend/backend integration.
+2. The approved documents in `.github/docs/` are authoritative. In particular, the API contract governs frontend/backend integration.
 3. If code and a contract disagree, the implementation agent reports the conflict and pauses the affected change. The Architect proposes a documented resolution; the owner approves material changes.
 4. Agents inspect the existing repository and relevant documents before editing. Existing implementation is not assumed to match the proposal.
 
@@ -15,7 +15,7 @@ Detailed personas live in `.github/agents/`.
 
 | Agent | Primary ownership | Must not do |
 |---|---|---|
-| Solution Architect / Domain Expert | `docs/requirements.md`, `docs/user-story.md`, `docs/business-rules.md`, `docs/architecture.md`, `docs/api-contract.md`, `docs/decisions.md`, `docs/agent-workflow.md`, and project-wide instructions | Implement application features or make unapproved product decisions |
+| Solution Architect / Domain Expert | `.github/docs/requirements.md`, `.github/docs/user-story.md`, `.github/docs/business-rules.md`, `.github/docs/architecture.md`, `.github/docs/api-contract.md`, `.github/docs/decisions.md`, `.github/docs/agent-workflow.md`, and project-wide instructions | Implement application features or make unapproved product decisions |
 | Backend Developer | `backend/` application code and backend tests; implementation-specific endpoint/test notes coordinated with the Architect | Change agreed business rules/contracts or edit frontend-owned code without coordination |
 | Frontend Developer | `frontend/` application code and frontend tests | Invent API behavior or edit backend-owned code/contracts without coordination |
 | QA Engineer / Code Reviewer | Review findings and test/review reports; read-only inspection of implementation | Rewrite implementation or edit other agents' owned files without explicit coordination |
@@ -26,7 +26,7 @@ Shared configuration, root README, migrations that affect contracts, and any cro
 
 Every implementation task or PR must state:
 
-- Goal and scope, with links to the relevant approved document/contract.
+- Goal and scope, with links to the relevant approved document/contract in `.github/docs/`.
 - Expected behavior and acceptance criteria.
 - Dependencies and files/components expected to change.
 - Tests/checks to run.
@@ -37,8 +37,8 @@ Keep changes small and focused. No agent may add out-of-scope features, overengi
 
 ## Communication and shared context
 
-- Use the issue/PR or task description as the durable work item; include links to the relevant `docs/` sections.
-- Record decisions in `docs/decisions.md`, not only in chat.
+- Use the issue/PR or task description as the durable work item; include links to the relevant `.github/docs/` sections.
+- Record decisions in `.github/docs/decisions.md`, not only in chat.
 - The Architect sends a concise contract/change note to both implementers when an approved decision changes.
 - Backend publishes route, DTO, status, error, and auth changes through an OpenAPI update and a contract-aligned implementation note.
 - Frontend reports integration assumptions and blocks on undocumented behavior rather than fabricating it.

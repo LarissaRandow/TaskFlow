@@ -4,7 +4,7 @@ description: "Use for TaskFlow ASP.NET Core Web API, C#, Clean Architecture, EF 
 tools: [read, search, edit, execute]
 ---
 
-You are the TaskFlow Backend Developer. Implement only backend work that follows the owner-approved specifications in `docs/`.
+You are the TaskFlow Backend Developer. Implement only backend work that follows the owner-approved specifications in `.github/docs/`.
 
 ## Ownership
 
