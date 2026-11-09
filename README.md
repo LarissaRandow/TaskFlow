@@ -81,7 +81,11 @@ Expected flow:
 4. The API creates the account.
 5. The user proceeds to the login flow.
 
-[▶ Watch the user registration demo](./assets/readme/20261109-1735-17.4996828.mp4)
+
+
+https://github.com/user-attachments/assets/b15825f4-d4d9-4c09-941b-b54693a91958
+
+
 
 ### 2. SIGN IN
 
@@ -98,7 +102,11 @@ When the credentials are invalid:
 - The API returns `401 Unauthorized`.
 - The interface displays a generic invalid-credentials message.
 
-[▶ Watch the sign-in demo](./assets/readme/20261109-1738-01.3257153.mp4)
+
+
+https://github.com/user-attachments/assets/a39c2d3e-20bd-4e9a-b363-461ac8934b91
+
+
 
 ### 3. SIGN OUT
 
@@ -108,7 +116,11 @@ The user opens the account menu in the dashboard and selects **Sign out**.
 - The user is redirected to the login screen.
 - Protected dashboard routes require authentication; after logout, the user must sign in again to access them.
 
-[▶ Watch the sign-out demo](./assets/readme/20261109-1740-59.5903702.mp4)
+
+
+https://github.com/user-attachments/assets/7632cb96-14ad-4bf6-a9a7-e958daee44de
+
+
 
 ### 4. DASHBOARD
 
@@ -130,19 +142,31 @@ Users can manage their own tasks through the dashboard.
 
 The user creates a task by entering a title and, optionally, a description and due date. The API assigns the task to the authenticated user and sets its initial status to `Todo`.
 
-[▶ Watch the task creation demo](./assets/readme/20261109-1750-40.7494963.mp4)
+
+
+https://github.com/user-attachments/assets/8f761d3e-9bbb-46cc-94e9-e5a1d7111946
+
+
 
 #### 5.2 UPDATE A TASK
 
 The user can edit a task's title, description, due date, and status. The selected status must be one of `Todo`, `InProgress`, `Completed`, or `Discarded`.
 
-[▶ Watch the task update demo](./assets/readme/20261109-1751-49.0247828.mp4)
+
+
+https://github.com/user-attachments/assets/690d7615-ca01-4630-98cf-4393252b5c2f
+
+
 
 #### 5.3 DELETE A TASK
 
 The user selects **Delete**, reviews the confirmation dialog, and confirms the action. Only tasks owned by the authenticated user can be deleted.
 
-[▶ Watch the task deletion demo](./assets/readme/20261109-1752-45.6655125.mp4)
+
+
+https://github.com/user-attachments/assets/b762a72a-2e96-4cf5-8ff9-e9c12751ed1d
+
+
 
 Key product rules:
 
@@ -161,10 +185,10 @@ The project used an AI-agent collaboration workflow organized around clear roles
 
 The main roles were:
 
-- Solution Architect / Domain Expert
-- Backend Developer
-- Frontend Developer
-- QA Engineer / Code Reviewer
+- [Solution Architect / Domain Expert](./.github/agents/solution-architect.agent.md)
+- [Backend Developer](./.github/agents/backend-developer.agent.md)
+- [Frontend Developer](./.github/agents/frontend-developer.agent.md)
+- [QA Engineer / Code Reviewer](./.github/agents/qa-reviewer.agent.md)
 
 Each agent worked within its area of responsibility and followed the approved requirements and API contract.
 
@@ -172,10 +196,10 @@ Each agent worked within its area of responsibility and followed the approved re
 
 Project instructions and implementation guidance are documented in:
 
-- `.github/docs/requirements.md`
-- `.github/docs/api-contract.md`
-- `.github/docs/architecture.md`
-- `.github/docs/agent-workflow.md`
+- [Requirements](./.github/docs/requirements.md)
+- [API Contract](./.github/docs/api-contract.md)
+- [Architecture](./.github/docs/architecture.md)
+- [Agent Workflow](./.github/docs/agent-workflow.md)
 
 These documents served as the source of truth for keeping the frontend, backend, and business rules aligned.
 
