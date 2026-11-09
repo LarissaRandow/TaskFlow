@@ -28,6 +28,8 @@ TaskFlow.Api  ->  TaskFlow.Application  ->  TaskFlow.Domain
 - **TaskFlow.Infrastructure** — adapters implementing persistence and identity/token services. It contains the EF Core `DbContext`, SQL Server configuration, Identity integration, and database migrations.
 - **TaskFlow.Api** — HTTP boundary and composition root. Controllers map requests to application use cases and return HTTP responses; the API also configures authentication, authorization, and OpenAPI.
 - **TaskFlow.Api.Tests** — API-level tests that exercise endpoints and HTTP behavior using ASP.NET Core's test host.
+- **TaskFlow.Application.Tests** — unit tests for task application services using a recording repository fake.
+- **TaskFlow.Infrastructure.Tests** — SQL Server integration tests for EF Core migrations and task persistence.
 
 Controllers are kept focused on HTTP concerns. Business validation and task rules are handled by Application and Domain code, while Infrastructure implements external technical details.
 
@@ -49,13 +51,21 @@ For direct local API execution, configure `ConnectionStrings:TaskFlow` and enabl
 
 ## Tests
 
-Run the backend test project from the repository root:
+Run all backend tests from the repository root:
 
 ```powershell
-dotnet test .\backend\tests\TaskFlow.Api.Tests\TaskFlow.Api.Tests.csproj
+dotnet test .\backend\backend.slnx
 ```
 
-The current suite covers:
+The Infrastructure tests create uniquely named temporary databases and apply the EF Core migrations. Configure `TASKFLOW_TEST_SQLSERVER` with a SQL Server connection string that has permission to create and drop databases to run them; otherwise, those tests are reported as skipped. For example, with SQL Server LocalDB on Windows:
+
+```powershell
+$env:TASKFLOW_TEST_SQLSERVER = 'Server=(localdb)\MSSQLLocalDB;Database=master;Trusted_Connection=True;TrustServerCertificate=True'
+dotnet test .\backend\tests\TaskFlow.Infrastructure.Tests\TaskFlow.Infrastructure.Tests.csproj
+Remove-Item Env:\TASKFLOW_TEST_SQLSERVER
+```
+
+The API tests cover:
 
 - Registration validation, duplicate-email behavior, and exclusion of password material from responses
 - Login validation, generic invalid-credential responses, and issued JWT authentication
@@ -65,4 +75,8 @@ The current suite covers:
 - Task deletion, including attempts to delete another user's task
 - Selected OpenAPI endpoint and bearer-authentication metadata
 
-The tests use the ASP.NET Core test host and stubbed application services for endpoint behavior; they do not require Docker or SQL Server. They verify the HTTP/authentication boundary and API behavior, but are not a substitute for tests against a live SQL Server instance or a separate suite of Domain/Application unit tests.
+The Application tests cover task creation and update validation, exact allowed statuses and field limits, authenticated-user ownership propagation, missing-task and failed-update results, and repository call/cancellation-token forwarding for all task services. They use a recording repository fake and do not require Docker or SQL Server.
+
+The Infrastructure tests exercise migrations, task persistence, user-scoped reads/deletes, and updates against SQL Server. They use a separate temporary database per test and require an explicitly configured test connection string.
+
+The API tests use the ASP.NET Core test host and stubbed application services; they also do not require Docker or SQL Server. The three suites cover the HTTP/authentication boundary, application-service behavior, and EF Core persistence respectively.
