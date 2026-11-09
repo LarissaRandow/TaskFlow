@@ -138,6 +138,13 @@ After authentication, the user can access their Kanban board, which displays:
 
 Users can manage their own tasks through the dashboard.
 
+Key product rules:
+
+- Each task belongs to the authenticated user.
+- The client cannot choose or change the task's `userId`.
+- The only allowed statuses are `Todo`, `InProgress`, `Completed`, and `Discarded`.
+- New tasks are created with the `Todo` status.
+
 #### 5.1 CREATE A TASK
 
 The user creates a task by entering a title and, optionally, a description and due date. The API assigns the task to the authenticated user and sets its initial status to `Todo`.
@@ -168,12 +175,6 @@ https://github.com/user-attachments/assets/b762a72a-2e96-4cf5-8ff9-e9c12751ed1d
 
 
 
-Key product rules:
-
-- Each task belongs to the authenticated user.
-- The client cannot choose or change the task's `userId`.
-- The only allowed statuses are `Todo`, `InProgress`, `Completed`, and `Discarded`.
-- New tasks are created with the `Todo` status.
 
 ---
 
